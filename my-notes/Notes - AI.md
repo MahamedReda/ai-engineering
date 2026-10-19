@@ -77,3 +77,11 @@ Workflow automation Travel planning
 Event planning
 Data extraction, entry, and annotation
 Lead generation
+
+
+
+AI Projects on Github (Opensource)
+https://goodailist.com/repos
+
+
+

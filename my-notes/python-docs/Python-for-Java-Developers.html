@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python for Java Developers</title>
+<style>
+:root {
+  --bg: #fbfaf7; --panel: #ffffff; --ink: #1d1d1b; --muted: #5f5e58; --rule: #e4e1d8;
+  --accent: #2f5bd3; --accent-soft: #e9eefc; --code-bg: #f3f1ea; --java: #a34a12; --py: #1f6f43;
+  --warn-bg: #fff6e0; --warn: #8a5a00;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161614; --panel: #1f1f1c; --ink: #ecebe6; --muted: #a6a49c; --rule: #34332e;
+    --accent: #8aa8ff; --accent-soft: #232b45; --code-bg: #262622; --java: #f0a070; --py: #7fd3a3;
+    --warn-bg: #3a3020; --warn: #f2c66d;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161614; --panel: #1f1f1c; --ink: #ecebe6; --muted: #a6a49c; --rule: #34332e;
+  --accent: #8aa8ff; --accent-soft: #232b45; --code-bg: #262622; --java: #f0a070; --py: #7fd3a3;
+  --warn-bg: #3a3020; --warn: #f2c66d;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+.layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+nav { position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto; padding: 28px 20px; border-right: 1px solid var(--rule); }
+nav .brand { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+nav .sub { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+nav a { display: block; color: var(--ink); text-decoration: none; font-size: 14px; padding: 5px 8px; border-radius: 6px; }
+nav a:hover { background: var(--accent-soft); }
+nav .week { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin: 16px 8px 4px; }
+main { padding: 36px 48px 80px; min-width: 0; }
+h1 { font-size: 32px; line-height: 1.2; margin: 0 0 8px; }
+h2 { font-size: 24px; margin: 56px 0 6px; padding-top: 12px; border-top: 1px solid var(--rule); }
+h3 { font-size: 18px; margin: 28px 0 8px; }
+p, li { max-width: 74ch; }
+.lead { font-size: 18px; color: var(--muted); margin-top: 0; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 999px; margin-bottom: 8px; }
+code { font-family: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace; font-size: .9em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code-bg); padding: 14px 16px; border-radius: 8px; overflow-x: auto; margin: 0; }
+pre code { background: none; padding: 0; font-size: 14px; line-height: 1.55; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0 18px; }
+.pair > div { min-width: 0; }
+.label { font-size: 12px; font-weight: 700; margin: 0 0 4px; letter-spacing: .04em; }
+.label.java { color: var(--java); } .label.py { color: var(--py); }
+table { border-collapse: collapse; width: 100%; margin: 12px 0 18px; font-size: 15px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-size: 13px; color: var(--muted); font-weight: 600; }
+.box { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 18px; margin: 16px 0; }
+.box h4 { margin: 0 0 6px; font-size: 15px; }
+.warn { background: var(--warn-bg); border-color: transparent; }
+.warn h4 { color: var(--warn); }
+.docs a { color: var(--accent); }
+a { color: var(--accent); }
+ol.ex li, ul li { margin: 4px 0; }
+.theme { position: fixed; right: 16px; top: 14px; background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer; }
+@media (max-width: 860px) {
+  .layout { display: block; }
+  nav { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); padding: 16px; }
+  main { padding: 24px 16px 60px; }
+  .pair { grid-template-columns: 1fr; }
+  h1 { font-size: 26px; }
+}
+@media print { nav, .theme { display: none; } .layout { display: block; } main { padding: 0; } }
+</style>
+</head>
+<body>
+<button class="theme" id="theme" type="button">Light / dark</button>
+<div class="layout">
+<nav>
+  <div class="brand">Python for Java Developers</div>
+  <div class="sub">Weeks 1–2 of your AI engineering plan</div>
+  <a href="#start">How to use this guide</a>
+  <a href="#site">How the official docs work</a>
+  <div class="week">Week 1</div>
+  <a href="#p1">1 · Running Python</a>
+  <a href="#p2">2 · Syntax and types</a>
+  <a href="#p3">3 · Control flow and functions</a>
+  <a href="#p4">4 · Collections and comprehensions</a>
+  <div class="week">Week 2</div>
+  <a href="#p5">5 · Modules, files, errors</a>
+  <a href="#p6">6 · Classes and dataclasses</a>
+  <a href="#p7">7 · Type hints and tests</a>
+  <a href="#p8">8 · Idioms in AI code</a>
+  <div class="week">Reference</div>
+  <a href="#mistakes">Common Java habits to drop</a>
+  <a href="#cheat">Cheat sheet</a>
+</nav>
+<main>
+
+<span class="tag">Offline guide · Python 3.13</span>
+<h1>Python for Java Developers</h1>
+<p class="lead">Everything you need from Python for AI engineering, explained by comparing it with Java. Eight short parts, two weeks, then you are ready for the repo lessons.</p>
+
+<section id="start">
+<h3>How to use this guide</h3>
+<ol>
+  <li><strong>Read one part</strong> (20–30 minutes). The Java and Python examples are side by side.</li>
+  <li><strong>Type every Python example</strong> into the interactive prompt. Don't copy and paste; typing builds the habit.</li>
+  <li><strong>Do the exercises</strong> at the end of the part, in your <code>ai-journey</code> repo.</li>
+  <li><strong>Then read the linked official chapter.</strong> It will be quick, because you already know the idea. The links open the offline copy in <code>official-html</code>, which is next to this file.</li>
+</ol>
+<p>Parts 1–4 are week 1 and parts 5–8 are week 2. The full official tutorial is also in this folder as <code>Python-3.13-Tutorial.pdf</code> if you prefer to read on paper or a tablet.</p>
+</section>
+
+<section id="site">
+<h3>How the official docs work</h3>
+<p>The Python website has three different kinds of documentation, and they are easy to mix up. That's usually why it feels confusing.</p>
+<table>
+  <tr><th>Section</th><th>What it is</th><th>Java equivalent</th><th>When to use it</th></tr>
+  <tr><td><a href="official-html/tutorial/index.html">Tutorial</a></td><td>A tour of the language, read in order</td><td>"The Java Tutorials" from Oracle</td><td>Now: chapters 3–9 only</td></tr>
+  <tr><td><a href="official-html/library/index.html">Library Reference</a></td><td>Every built-in module, one page each</td><td>Javadoc</td><td>Look things up: <code>json</code>, <code>pathlib</code>, <code>unittest</code></td></tr>
+  <tr><td><a href="official-html/reference/index.html">Language Reference</a></td><td>The formal specification</td><td>The Java Language Specification</td><td>Almost never</td></tr>
+</table>
+<p>Tip: in the interactive prompt, <code>help(str)</code> or <code>help(list.sort)</code> prints the documentation for anything, which is often quicker than the website.</p>
+</section>
+
+<!-- ============ PART 1 ============ -->
+<section id="p1">
+<h2>1 · Running Python</h2>
+<p>Python has no compile step and no main class. You run a file directly, or type code into an interactive prompt (the REPL) and see results immediately.</p>
+
+<h3>The interactive prompt</h3>
+<pre><code># Windows                      # Mac
+python                         python3
+
+&gt;&gt;&gt; 2 + 3
+5
+&gt;&gt;&gt; "hello".upper()
+'HELLO'
+&gt;&gt;&gt; exit()</code></pre>
+<p>Keep a prompt open while you read. It is the fastest way to answer "what does this do?"</p>
+
+<h3>A script, and the "main method"</h3>
+<div class="pair">
+<div><p class="label java">JAVA</p><pre><code>public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello");
+    }
+}
+// javac Hello.java &amp;&amp; java Hello</code></pre></div>
+<div><p class="label py">PYTHON · hello.py</p><pre><code>def main() -&gt; None:
+    print("Hello")
+
+
+if __name__ == "__main__":
+    main()
+
+# python hello.py</code></pre></div>
+</div>
+<p><code>if __name__ == "__main__":</code> means "only run this when the file is executed directly, not when another file imports it." You will see it at the bottom of almost every repo lesson.</p>
+
+<h3>Dependencies: venv and pip instead of Maven</h3>
+<table>
+  <tr><th>Java / Maven</th><th>Python</th></tr>
+  <tr><td>Local repository per project</td><td>A virtual environment: <code>python -m venv .venv</code></td></tr>
+  <tr><td>(Maven activates automatically)</td><td>Activate it: <code>.venv\Scripts\Activate.ps1</code> (Windows) or <code>source .venv/bin/activate</code> (Mac)</td></tr>
+  <tr><td><code>pom.xml</code> dependencies</td><td><code>requirements.txt</code> (or <code>pyproject.toml</code>)</td></tr>
+  <tr><td><code>mvn install</code></td><td><code>pip install -r requirements.txt</code></td></tr>
+  <tr><td>Add one dependency</td><td><code>pip install numpy</code></td></tr>
+</table>
+
+<div class="box"><h4>Exercises</h4>
+<ol class="ex">
+  <li>Create the <code>.venv</code> in your <code>ai-journey</code> folder, activate it, and run <code>pip install numpy</code>.</li>
+  <li>Write <code>week01/hello.py</code> with a <code>main()</code> function, and run it.</li>
+  <li>In the prompt, run <code>import this</code> and read "The Zen of Python." It is the style guide in 19 lines.</li>
+</ol></div>
+<p class="docs">Official: <a href="official-html/tutorial/interpreter.html">Tutorial ch. 2, Using the interpreter</a> · <a href="official-html/tutorial/venv.html">ch. 12, Virtual environments and packages</a></p>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section id="p2">
+<h2>2 · Syntax and types</h2>
+<p>Indentation replaces braces, and variables have no declared types. Values still have strict types, though: <code>"1" + 1</code> is an error, not <code>"11"</code>.</p>
+<div class="pair">
+<div><p class="label java">JAVA</p><pre><code>int count = 3;
+String name = "Reda";
+final double RATE = 0.2;
+String nothing = null;
+
+if (count &gt; 0 &amp;&amp; name != null) {
+    System.out.println("Hi " + name + ", " + count);
+} else if (count == 0) {
+    System.out.println("zero");
+}
+
+int half = 7 / 2;        // 3
+double exact = 7 / 2.0;  // 3.5
+boolean same = a.equals(b);</code></pre></div>
+<div><p class="label py">PYTHON</p><pre><code>count = 3
+name = "Reda"
+RATE = 0.2          # constant by naming convention only
+nothing = None
+
+if count &gt; 0 and name is not None:
+    print(f"Hi {name}, {count}")
+elif count == 0:
+    print("zero")
+
+
+half = 7 // 2       # 3
+exact = 7 / 2       # 3.5  (/ always gives a float)
+same = a == b       # == compares values, like equals()</code></pre></div>
+</div>
+
+<h3>What is different</h3>
+<ul>
+  <li><strong>Blocks are indentation</strong> (4 spaces). A colon <code>:</code> starts a block. No semicolons.</li>
+  <li><strong><code>and</code>, <code>or</code>, <code>not</code></strong> instead of <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>. <code>True</code>, <code>False</code> and <code>None</code> are capitalized.</li>
+  <li><strong><code>==</code> compares values; <code>is</code> compares identity.</strong> Use <code>is</code> only with <code>None</code>: <code>if x is None:</code>.</li>
+  <li><strong>Integers never overflow.</strong> <code>2 ** 100</code> just works (<code>**</code> is the power operator).</li>
+  <li><strong>Truthiness:</strong> <code>0</code>, <code>""</code>, <code>[]</code>, <code>{}</code> and <code>None</code> count as false. <code>if items:</code> means "if the list is not empty."</li>
+</ul>
+
+<h3>Strings</h3>
+<pre><code>name = "Ada"
+greeting = f"Hello {name}, you have {3 * 2} messages"   # f-string: like String.format, but inline
+text = """Multi-line
+string"""                                              # like Java text blocks
+"python"[0]        # 'p'
+"python"[-1]       # 'n'   negative index counts from the end
+"python"[0:3]      # 'pyt' slicing: start inclusive, end exclusive
+len("python")      # 6     len() works on strings, lists, dicts, everything
+"a,b,c".split(",") # ['a', 'b', 'c']
+" ".join(["a", "b"])  # 'a b'   join is a method on the separator
+"  hi ".strip()    # 'hi'</code></pre>
+
+<div class="box"><h4>Exercises</h4>
+<ol class="ex">
+  <li>Ask for the user's name with <code>input("Name? ")</code> and print a greeting with an f-string.</li>
+  <li>Given <code>s = "machine learning"</code>, print the first word, the last 8 characters, and the string reversed (hint: <code>s[::-1]</code>).</li>
+  <li>Try <code>"1" + 1</code> in the prompt and read the error. Then fix it two ways: <code>int("1") + 1</code> and <code>"1" + str(1)</code>.</li>
+</ol></div>
+<p class="docs">Official: <a href="official-html/tutorial/introduction.html">Tutorial ch. 3, An informal introduction</a></p>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section id="p3">
+<h2>3 · Control flow and functions</h2>
+<div class="pair">
+<div><p class="label java">JAVA</p><pre><code>for (int i = 0; i &lt; 5; i++) { ... }
+
+for (String w : words) { ... }
+
+for (int i = 0; i &lt; words.size(); i++) {
+    System.out.println(i + " " + words.get(i));
+}
+
+switch (status) {
+    case 200 -&gt; ok();
+    case 404 -&gt; missing();
+    default  -&gt; fail();
+}</code></pre></div>
+<div><p class="label py">PYTHON</p><pre><code>for i in range(5): ...
+
+for w in words: ...
+
+for i, w in enumerate(words):
+    print(i, w)
+
+
+for name, score in zip(names, scores): ...   # walk two lists together
+
+match status:
+    case 200: ok()
+    case 404: missing()
+    case _:   fail()</code></pre></div>
+</div>
+<p>There is no <code>i++</code>; write <code>i += 1</code>. <code>while</code>, <code>break</code> and <code>continue</code> work as in Java.</p>
+
+<h3>Functions</h3>
+<pre><code>def top_words(text: str, n: int = 10, lowercase: bool = True) -&gt; list[str]:
+    """Return the n most common words.  (This string is the function's documentation.)"""
+    if lowercase:
+        text = text.lower()
+    ...
+
+top_words(doc)                      # defaults are used
+top_words(doc, 5)
+top_words(doc, n=5, lowercase=False)   # keyword arguments: clear, any order
+
+def stats(numbers: list[float]) -&gt; tuple[float, float]:
+    return min(numbers), max(numbers)    # return several values as a tuple
+
+low, high = stats([3, 1, 4])             # and unpack them</code></pre>
+<ul>
+  <li><strong>Default and keyword arguments replace overloading.</strong> One function, many ways to call it.</li>
+  <li><strong>Functions are values.</strong> Pass them around like a <code>Function&lt;T,R&gt;</code>: <code>sorted(words, key=len)</code>.</li>
+  <li><strong>Lambdas</strong> are one expression only: <code>key=lambda w: w.lower()</code>.</li>
+  <li><code>*args</code> collects extra positional arguments into a tuple and <code>**kwargs</code> collects keyword arguments into a dict. You'll see them in library code.</li>
+</ul>
+<div class="box warn"><h4>The classic trap</h4>
+<p>Never use a mutable default like <code>def add(item, items=[])</code>. The list is created once and shared between calls. Write <code>items: list | None = None</code>, then <code>if items is None: items = []</code>.</p></div>
+
+<div class="box"><h4>Exercises</h4>
+<ol class="ex">
+  <li>FizzBuzz from 1 to 30 with <code>for</code> and <code>range</code>.</li>
+  <li>Write <code>describe(status: int) -&gt; str</code> using <code>match</code> for 200, 401, 404 and anything else.</li>
+  <li>Write <code>average(*numbers)</code> so that <code>average(1, 2, 3)</code> returns <code>2.0</code>.</li>
+</ol></div>
+<p class="docs">Official: <a href="official-html/tutorial/controlflow.html">Tutorial ch. 4, More control flow tools</a></p>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section id="p4">
+<h2>4 · Collections and comprehensions</h2>
+<p>Four built-in types cover almost everything. You rarely need anything like Java's collection class hierarchy.</p>
+<table>
+  <tr><th>Java</th><th>Python</th><th>Literal</th></tr>
+  <tr><td><code>ArrayList</code></td><td><code>list</code></td><td><code>[1, 2, 3]</code></td></tr>
+  <tr><td><code>HashMap</code></td><td><code>dict</code> (keeps insertion order)</td><td><code>{"a": 1, "b": 2}</code></td></tr>
+  <tr><td><code>HashSet</code></td><td><code>set</code></td><td><code>{1, 2, 3}</code></td></tr>
+  <tr><td><code>List.of(...)</code>, small records</td><td><code>tuple</code> (immutable)</td><td><code>(1, "a")</code></td></tr>
+  <tr><td><code>ArrayDeque</code></td><td><code>collections.deque</code></td><td><code>deque([1, 2])</code></td></tr>
+  <tr><td><code>Map&lt;String,Integer&gt;</code> counting</td><td><code>collections.Counter</code></td><td><code>Counter(words)</code></td></tr>
+</table>
+
+<pre><code>nums = [5, 3, 8]
+nums.append(1)             # add
+nums[0]; nums[-1]          # first, last
+nums[1:3]                  # slice -&gt; new list
+sorted(nums)               # new sorted list;  nums.sort() sorts in place
+sorted(words, key=len, reverse=True)
+
+ages = {"ada": 36, "alan": 41}
+ages["grace"] = 85         # put
+ages.get("bob", 0)         # getOrDefault
+"ada" in ages              # containsKey
+for name, age in ages.items():
+    print(name, age)</code></pre>
+
+<h3>Comprehensions replace most streams</h3>
+<div class="pair">
+<div><p class="label java">JAVA</p><pre><code>List&lt;Integer&gt; doubled = nums.stream()
+    .filter(x -&gt; x &gt; 0)
+    .map(x -&gt; x * 2)
+    .collect(Collectors.toList());
+
+Map&lt;String, Integer&gt; lengths = words.stream()
+    .collect(Collectors.toMap(w -&gt; w, String::length));</code></pre></div>
+<div><p class="label py">PYTHON</p><pre><code>doubled = [x * 2 for x in nums if x &gt; 0]
+
+
+
+
+lengths = {w: len(w) for w in words}
+
+
+unique = {w.lower() for w in words}     # set comprehension</code></pre></div>
+</div>
+<p>Read a comprehension right to left: "for each x in nums, if x &gt; 0, keep x * 2." Also useful: <code>sum()</code>, <code>min()</code>, <code>max(items, key=...)</code>, <code>any()</code> and <code>all()</code>.</p>
+
+<div class="box"><h4>Exercises (this is your week 1 deliverable)</h4>
+<ol class="ex">
+  <li><strong><code>week01/word_count.py</code>:</strong> read a text file, split it into lowercase words, count them with <code>Counter</code>, and print the 10 most common with <code>most_common(10)</code>. Then do it again without <code>Counter</code>, using a dict.</li>
+  <li>From a list of numbers, build a list of squares of the even ones using one comprehension.</li>
+  <li>Invert a dict <code>{"a": 1, "b": 2}</code> into <code>{1: "a", 2: "b"}</code> with a dict comprehension.</li>
+</ol></div>
+<p class="docs">Official: <a href="official-html/tutorial/datastructures.html">Tutorial ch. 5, Data structures</a> · <a href="official-html/library/collections.html">collections module</a></p>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section id="p5">
+<h2>5 · Modules, files, JSON and errors</h2>
+<h3>Modules and packages</h3>
+<p>Every <code>.py</code> file is a module and every folder of modules is a package. There is no classpath: Python looks in the current folder and in the active <code>.venv</code>.</p>
+<pre><code># project/
+#   app/
+#     __init__.py      (marks a package; can be empty)
+#     text_utils.py
+#   main.py
+
+import json                              # whole module:  json.dumps(...)
+from pathlib import Path                 # one name
+from app.text_utils import top_words     # your own code</code></pre>
+
+<h3>Files: <code>with</code> is try-with-resources</h3>
+<div class="pair">
+<div><p class="label java">JAVA</p><pre><code>try (var reader = Files.newBufferedReader(path)) {
+    String line;
+    while ((line = reader.readLine()) != null) {
+        process(line);
+    }
+}</code></pre></div>
+<div><p class="label py">PYTHON</p><pre><code>with open("notes.txt", encoding="utf-8") as f:
+    for line in f:
+        process(line.rstrip("\n"))
+
+# or simply:
+text = Path("notes.txt").read_text(encoding="utf-8")</code></pre></div>
+</div>
+<p>Always pass <code>encoding="utf-8"</code>. Windows otherwise uses a different default, and your code will behave differently on your two machines.</p>
+
+<h3>JSON: you'll use it every day with LLMs</h3>
+<pre><code>import json
+
+data = json.loads('{"name": "Ada", "skills": ["math", "code"]}')   # str  -&gt; dict
+data["skills"][0]                                                    # 'math'
+text = json.dumps(data, indent=2)                                    # dict -&gt; str
+Path("out.json").write_text(text, encoding="utf-8")</code></pre>
+
+<h3>Exceptions: all unchecked</h3>
+<pre><code>try:
+    value = int(user_input)
+except ValueError as e:
+    print(f"Not a number: {e}")
+else:
+    print("parsed fine")        # runs only if no exception
+finally:
+    print("always runs")
+
+class QuotaExceeded(Exception):  # custom exception
+    pass
+
+raise QuotaExceeded("monthly token budget used up")</code></pre>
+<p>Python style is "easier to ask forgiveness than permission": try the operation and catch the failure, instead of checking everything first.</p>
+
+<div class="box"><h4>Exercises</h4>
+<ol class="ex">
+  <li>Move your <code>top_words</code> function into <code>text_utils.py</code> and import it from <code>main.py</code>.</li>
+  <li>Save the word counts to <code>counts.json</code>, then read the file back and print the top 3.</li>
+  <li>Make the script print a friendly message instead of a stack trace when the input file doesn't exist (<code>FileNotFoundError</code>).</li>
+</ol></div>
+<p class="docs">Official: <a href="official-html/tutorial/modules.html">ch. 6, Modules</a> · <a href="official-html/tutorial/inputoutput.html">ch. 7, Input and output</a> · <a href="official-html/tutorial/errors.html">ch. 8, Errors and exceptions</a> · <a href="official-html/library/pathlib.html">pathlib</a> · <a href="official-html/library/json.html">json</a></p>
+</section>
+
+<!-- ============ PART 6 ============ -->
+<section id="p6">
+<h2>6 · Classes and dataclasses</h2>
+<p>Classes exist, but Python uses far fewer of them than Java. If something has no state, make it a function in a module.</p>
+<div class="pair">
+<div><p class="label java">JAVA</p><pre><code>public record Message(String role, String content) {}
+
+public class Conversation {
+    private final List&lt;Message&gt; messages = new ArrayList&lt;&gt;();
+    private final String system;
+
+    public Conversation(String system) {
+        this.system = system;
+    }
+
+    public void add(String role, String text) {
+        messages.add(new Message(role, text));
+    }
+
+    public int size() { return messages.size(); }
+}</code></pre></div>
+<div><p class="label py">PYTHON</p><pre><code>from dataclasses import dataclass, field
+
+
+@dataclass(frozen=True)
+class Message:
+    role: str
+    content: str
+
+
+@dataclass
+class Conversation:
+    system: str
+    messages: list[Message] = field(default_factory=list)
+
+    def add(self, role: str, text: str) -&gt; None:
+        self.messages.append(Message(role, text))
+
+    @property
+    def size(self) -&gt; int:
+        return len(self.messages)</code></pre></div>
+</div>
+<ul>
+  <li><strong><code>@dataclass</code> is your record or Lombok.</strong> It generates <code>__init__</code>, <code>__repr__</code> (toString) and <code>__eq__</code> (equals). <code>frozen=True</code> makes it immutable.</li>
+  <li><strong><code>self</code> is explicit.</strong> It is the first parameter of every method, and you write <code>self.x</code>, never just <code>x</code>.</li>
+  <li><strong>Nothing is private.</strong> A leading underscore (<code>_cache</code>) means "internal, please don't touch."</li>
+  <li><strong><code>@property</code></strong> turns a method into a read-only attribute: <code>conv.size</code>, not <code>conv.getSize()</code>.</li>
+  <li><strong>Interfaces:</strong> usually just duck typing ("if it has a <code>.complete()</code> method, it works"). When you want it explicit, use <code>typing.Protocol</code> or <code>abc.ABC</code>.</li>
+  <li><strong>Special methods</strong> like <code>__len__</code>, <code>__iter__</code> and <code>__str__</code> plug your class into <code>len()</code>, <code>for</code> loops and <code>print()</code>.</li>
+</ul>
+
+<div class="box"><h4>Exercises</h4>
+<ol class="ex">
+  <li>Build the <code>Conversation</code> class above, add three messages, and <code>print()</code> it. Notice the free <code>__repr__</code>.</li>
+  <li>Add a method <code>to_json(self) -&gt; str</code> using <code>dataclasses.asdict</code> and <code>json.dumps</code>. This is the exact shape of an LLM API request body.</li>
+  <li>Write a <code>Protocol</code> called <code>Model</code> with <code>complete(self, prompt: str) -&gt; str</code>, plus a fake class that returns <code>"ok"</code>. The repo lessons use this pattern a lot.</li>
+</ol></div>
+<p class="docs">Official: <a href="official-html/tutorial/classes.html">ch. 9, Classes</a> · <a href="official-html/library/dataclasses.html">dataclasses</a> · <a href="official-html/library/typing.html#typing.Protocol">typing.Protocol</a></p>
+</section>
+
+<!-- ============ PART 7 ============ -->
+<section id="p7">
+<h2>7 · Type hints and tests</h2>
+<h3>Type hints: documentation that tools can check</h3>
+<pre><code>def find_user(user_id: int, cache: dict[int, str] | None = None) -&gt; str | None:
+    ...
+
+from collections.abc import Callable
+Handler = Callable[[str], str]           # a type alias, like Function&lt;String,String&gt;</code></pre>
+<p>Python does <strong>not</strong> enforce hints when your code runs; they are for you, your editor and a type checker. Install one in your own environment (<code>pip install mypy</code>, then <code>mypy file.py</code>) to get compiler-like errors. Use hints on every function signature, as the repo does.</p>
+
+<h3>unittest is JUnit</h3>
+<div class="pair">
+<div><p class="label java">JAVA · JUnit 5</p><pre><code>class TextUtilsTest {
+    @Test
+    void countsWords() {
+        assertEquals(2, count("a b"));
+    }
+
+    @Test
+    void rejectsNull() {
+        assertThrows(IllegalArgumentException.class,
+                     () -&gt; count(null));
+    }
+}</code></pre></div>
+<div><p class="label py">PYTHON · tests/test_text_utils.py</p><pre><code>import unittest
+from app.text_utils import count
+
+
+class TextUtilsTest(unittest.TestCase):
+    def test_counts_words(self) -&gt; None:
+        self.assertEqual(count("a b"), 2)
+
+    def test_rejects_none(self) -&gt; None:
+        with self.assertRaises(ValueError):
+            count(None)
+
+
+if __name__ == "__main__":
+    unittest.main()</code></pre></div>
+</div>
+<p>Run every test in the <code>tests</code> folder with the same command the repo uses: <code>python -m unittest discover tests -v</code>. Test files must start with <code>test_</code>. Many teams use <code>pytest</code> instead, which is shorter, but <code>unittest</code> is built in and is what the curriculum expects.</p>
+
+<div class="box"><h4>Exercises (this is your week 2 deliverable)</h4>
+<ol class="ex">
+  <li>Pick a small Java utility you have written before (a parser, a validator, a rate limiter) and rewrite it in Python with type hints everywhere.</li>
+  <li>Write at least 5 <code>unittest</code> tests for it, including one for an error case.</li>
+  <li>Run <code>mypy</code> on it and fix what it reports.</li>
+</ol></div>
+<p class="docs">Official: <a href="official-html/library/unittest.html">unittest</a> · <a href="official-html/library/typing.html">typing</a></p>
+</section>
+
+<!-- ============ PART 8 ============ -->
+<section id="p8">
+<h2>8 · Idioms you will see in AI code</h2>
+
+<h3>Generators: values produced one at a time</h3>
+<p>LLM responses are streamed token by token, and generators are how Python models a stream.</p>
+<pre><code>def chunks(text: str, size: int):
+    for i in range(0, len(text), size):
+        yield text[i:i + size]          # pauses here, resumes on the next request
+
+for piece in chunks(document, 500):     # used for splitting documents in RAG
+    embed(piece)</code></pre>
+
+<h3>async / await: like CompletableFuture, but readable</h3>
+<pre><code>import asyncio
+
+async def ask(question: str) -&gt; str:
+    await asyncio.sleep(1)              # stands in for a network call
+    return f"answer to {question}"
+
+async def main() -&gt; None:
+    answers = await asyncio.gather(ask("a"), ask("b"), ask("c"))   # run concurrently
+    print(answers)                       # done in about 1 second, not 3
+
+asyncio.run(main())</code></pre>
+<p>You'll meet this in agent and server code (weeks 9–10). <code>Python-asyncio-overview.pdf</code> in this folder explains the model in more depth.</p>
+
+<h3>Environment variables for API keys</h3>
+<pre><code>import os
+api_key = os.environ.get("ANTHROPIC_API_KEY")
+if api_key is None:
+    raise SystemExit("Set ANTHROPIC_API_KEY first")</code></pre>
+
+<h3>Your first model call (week 6)</h3>
+<pre><code># pip install anthropic   (in your ai-journey environment)
+import anthropic
+
+client = anthropic.Anthropic()          # reads ANTHROPIC_API_KEY from the environment
+reply = client.messages.create(
+    model="claude-sonnet-5-5",          # check docs.claude.com for current model names
+    max_tokens=300,
+    messages=[{"role": "user", "content": "Explain RAG to a Java developer in 3 sentences."}],
+)
+print(reply.content[0].text)</code></pre>
+
+<h3>NumPy in 30 seconds (week 3)</h3>
+<pre><code>import numpy as np
+
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+a @ b                                    # dot product: 32
+a * 2                                    # [2 4 6], no loop needed
+cos = (a @ b) / (np.linalg.norm(a) * np.linalg.norm(b))   # cosine similarity, the core of search</code></pre>
+<p class="docs">Official: <a href="official-html/library/asyncio.html">asyncio</a> · <a href="official-html/tutorial/classes.html#generators">Generators</a> · <a href="official-html/library/os.html#os.environ">os.environ</a></p>
+</section>
+
+<section id="mistakes">
+<h2>Common Java habits to drop</h2>
+<table>
+  <tr><th>Java habit</th><th>Python way</th></tr>
+  <tr><td>A class for every concept</td><td>Functions in a module; classes only for state</td></tr>
+  <tr><td>Getters and setters</td><td>Plain attributes; <code>@property</code> only if logic is needed</td></tr>
+  <tr><td><code>for (int i = 0; i &lt; n; i++)</code> to index a list</td><td><code>for item in items</code> or <code>enumerate(items)</code></td></tr>
+  <tr><td>Overloaded methods</td><td>Default and keyword arguments</td></tr>
+  <tr><td>Builders</td><td>Keyword arguments, or a dataclass</td></tr>
+  <tr><td>Checking before acting (<code>if (map.containsKey(k))</code>)</td><td><code>d.get(k, default)</code> or try/except</td></tr>
+  <tr><td>Deep package trees (<code>com.company.app.service.impl</code>)</td><td>Flat: a few modules in one package</td></tr>
+  <tr><td>camelCase</td><td><code>snake_case</code> for functions and variables, <code>PascalCase</code> for classes</td></tr>
+</table>
+</section>
+
+<section id="cheat">
+<h2>Cheat sheet</h2>
+<table>
+  <tr><th>Java</th><th>Python</th></tr>
+  <tr><td><code>System.out.println(x)</code></td><td><code>print(x)</code></td></tr>
+  <tr><td><code>String.format("%s=%d", k, v)</code></td><td><code>f"{k}={v}"</code></td></tr>
+  <tr><td><code>list.size()</code>, <code>str.length()</code></td><td><code>len(x)</code></td></tr>
+  <tr><td><code>list.add(x)</code></td><td><code>items.append(x)</code></td></tr>
+  <tr><td><code>map.getOrDefault(k, d)</code></td><td><code>d.get(k, default)</code></td></tr>
+  <tr><td><code>list.contains(x)</code></td><td><code>x in items</code></td></tr>
+  <tr><td><code>Collections.sort(list, comparator)</code></td><td><code>sorted(items, key=...)</code></td></tr>
+  <tr><td><code>Optional&lt;T&gt;</code></td><td><code>T | None</code></td></tr>
+  <tr><td><code>a ? b : c</code></td><td><code>b if a else c</code></td></tr>
+  <tr><td><code>try-with-resources</code></td><td><code>with ... as ...:</code></td></tr>
+  <tr><td><code>record</code></td><td><code>@dataclass(frozen=True)</code></td></tr>
+  <tr><td><code>interface</code></td><td>Duck typing or <code>typing.Protocol</code></td></tr>
+  <tr><td><code>null</code></td><td><code>None</code></td></tr>
+  <tr><td><code>stream().filter().map()</code></td><td><code>[f(x) for x in xs if cond(x)]</code></td></tr>
+  <tr><td><code>CompletableFuture.allOf(...)</code></td><td><code>await asyncio.gather(...)</code></td></tr>
+  <tr><td>JUnit <code>@Test</code></td><td><code>unittest.TestCase</code>, methods named <code>test_*</code></td></tr>
+  <tr><td>Maven / Gradle</td><td><code>venv</code> + <code>pip</code> (or <code>uv</code>)</td></tr>
+</table>
+<p>Next step after part 8: back to your plan, week 3 (math with NumPy).</p>
+</section>
+
+</main>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, btn = document.getElementById('theme');
+  try { var saved = localStorage.getItem('py-guide-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  btn.addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = dark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('py-guide-theme', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

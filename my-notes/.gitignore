@@ -1,0 +1,5 @@
+# Copyrighted book: keep local only, the fork is public
+*.pdf
+!python-docs/*.pdf
+# Full offline Python docs (62 MB): re-download from docs.python.org
+python-docs/official-html/

@@ -84,4 +84,98 @@ AI Projects on Github (Opensource)
 https://goodailist.com/repos
 
 
+https://theresanaiforthat.com/task/sops/
 
+
+35–47 twice 
+
+
+
+Students are using AI to write essays. Writers are using AI to write books.13 Many
+startups already use AI to generate children’s, fan fiction, romance, and fantasy
+books. Unlike traditional books, AI-generated books can be interactive, as a book’s
+plot can change depending on a reader’s preference. This means that readers can
+actively participate in creating the story they are reading. A children’s reading app
+identifies the words that a child has trouble with and generates stories centered
+around these words
+
+
+
+For enterprises, AI can automate repetitive tasks such as lead management, invoicing,
+reimbursements, managing customer requests, data entry, and so on. One especially
+exciting use case is using AI models to synthesize data, which can then be used to
+improve the models themselves. You can use AI to create labels for your data, looping
+in humans to improve the labels. We discuss data synthesis in Chapter 8.
+
+AI can also help with sales lead generation,
+
+
+Involving humans in AI’s decision-making processes is called human-in-the-loop.
+
+
+
+If something is
+easy for you to build, it’s also easy for your competitors. What moats do you have to
+defend your product?
+
+In AI, there are generally three types of competitive advantages: technology, data, and
+distribution
+
+There are three layers to any AI application stack: application development, model
+development, and infrastructure.
+
+Application development
+        With models readily available, anyone can use them to develop applications. This
+        is the layer that has seen the most action in the last two years, and it is still rapidly
+        evolving. Application development involves providing a model with good
+        prompts and necessary context. This layer requires rigorous evaluation. Good
+        applications also demand good interfaces.
+Model development
+        This layer provides tooling for developing models, including frameworks for
+        modeling, training, finetuning, and inference optimization. Because data is central
+        to model development, this layer also contains dataset engineering. Model
+        development also requires rigorous evaluation.
+Infrastructure
+        At the bottom is the stack is infrastructure, which includes tooling for model
+        serving, managing data and compute, and monitoring.
+
+
+
+
+ stable diffusion ??
+
+For enterprise use cases, AI applications still need to solve business
+problems,
+
+
+In general, model
+adaptation techniques can be divided into two categories, depending on whether they
+require updating model weights.
+
+1. Prompt-based techniques, which include prompt engineering, adapt a model without
+updating the model weights.
+
+2. Finetuning, on the other hand, requires updating model weights.
+
+Modeling and training refers to the process of coming up with
+a model architecture, training it, and finetuning it. Examples of tools in this category
+are Google’s TensorFlow, Hugging Face’s Transformers, and Meta’s PyTorch.
+
+quantization, the process of reducing the
+precision of model weights
+
+training(pre training from random weights) / finetuneing // post training/ 
+
+
+
+Dataset engineering. Dataset engineering refers to curating, generating, and annotating
+the data needed for training and adapting AI models.
+
+Inference optimization means making models faster and
+cheaper
+
+Inference optimization techniques, including quantization, distillation, and parallelism,
+
+today till 105
++1 till 152
++2 till 199

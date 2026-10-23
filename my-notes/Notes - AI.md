@@ -176,6 +176,22 @@ cheaper
 
 Inference optimization techniques, including quantization, distillation, and parallelism,
 
+The application development layer consists of these responsibilities: evaluation,
+prompt engineering, and AI interface.
+
+
+Evaluation. Evaluation is about mitigating risks and uncovering opportunities. Evaluation
+is necessary throughout the whole model adaptation process. Evaluation is
+needed to select models, to benchmark progress, to determine whether an application
+is ready for deployment, and to detect issues and opportunities for improvement in
+production.
+
+
+Prompt engineering is about getting AI
+models to express the desirable behaviors from the input alone, without changing the
+model weights.
+
+
 today till 105
 +1 till 152
 +2 till 199

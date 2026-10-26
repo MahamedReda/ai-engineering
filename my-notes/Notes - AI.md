@@ -192,6 +192,8 @@ models to express the desirable behaviors from the input alone, without changing
 model weights.
 
 
+
+CH1 DONE 
 today till 105
 +1 till 152
 +2 till 199

@@ -192,8 +192,110 @@ models to express the desirable behaviors from the input alone, without changing
 model weights.
 
 
+Prompting::
+A prompt is an instruction given to a model to perform a task.
+
+
+
+  An enterprise agent always has the same five parts:
+
+  1. Trigger: something happens, like a new ticket, a signed contract, or the end of the month.
+  2. Gather context: it reads from the company's systems (CRM, email, documents, databases).
+  3. Do the thinking work: classify, check against policy, draft, summarize, spot problems.
+  4. Act: update the system, create tasks, send drafts. Important actions wait for human approval.
+  5. Log: record what it did and why, so it can be audited.
+
+   It runs in the background, started by events. Nobody has to open a chat and ask it.
+
+
+
+ A concrete example: "New customer signed"
+
+  Today, in a typical company:
+
+  ┌─────────────────────────────────────────────────────┬───────────────┬──────────────────────┐
+  │                        Step                         │      Who      │         Time         │
+  ├─────────────────────────────────────────────────────┼───────────────┼──────────────────────┤
+  │ Sales marks the deal won in the CRM                 │ Sales         │ —                    │
+  ├─────────────────────────────────────────────────────┼───────────────┼──────────────────────┤
+  │ Someone emails Legal to file the contract           │ Sales → Legal │ 1–2 days waiting     │
+  ├─────────────────────────────────────────────────────┼───────────────┼──────────────────────┤
+  │ Finance sets up billing by re-typing contract terms │ Finance       │ 1 day, errors common │
+  ├─────────────────────────────────────────────────────┼───────────────┼──────────────────────┤
+  │ Ops creates the customer's account and access       │ Ops           │ 2–3 days waiting     │
+  ├─────────────────────────────────────────────────────┼───────────────┼──────────────────────┤
+  │ Customer Success schedules the kickoff              │ CS            │ another day          │
+  └─────────────────────────────────────────────────────┴───────────────┴──────────────────────┘
+
+  About a week, five teams, and lots of copy-paste.
+
+  With agents in the process:
+
+  Deal marked "Won" in CRM
+        │
+        ▼
+  [Onboarding agent]
+    • reads the signed contract PDF
+    • extracts price, terms, start date, products
+    • checks for non-standard clauses ──► flags to Legal (human reviews only the unusual ones)
+    • drafts the billing setup ─────────► Finance clicks "approve"
+    • creates the account-setup tickets ► Ops
+    • drafts a kickoff email with times ► CS reviews and sends
+        │
+        ▼
+  Everything logged on the CRM record
+
+  Result: same day. People handle the judgment calls and approvals, and the agent handles the reading, re-typing,
+  checking and routing.
+
+  Examples in other departments, same pattern
+
+  ┌────────────┬────────────────────┬──────────────────────────────────────────────────────┬───────────────────────┐
+  │ Department │      Trigger       │                 What the agent does                  │      Human role       │
+  ├────────────┼────────────────────┼──────────────────────────────────────────────────────┼───────────────────────┤
+  │ Marketing  │ Campaign brief     │ Drafts content variants, checks brand/legal rules,   │ Approves final copy   │
+  │            │ approved           │ schedules                                            │                       │
+  ├────────────┼────────────────────┼──────────────────────────────────────────────────────┼───────────────────────┤
+  │ Sales      │ Inbound lead       │ Researches the company, scores the fit, drafts a     │ Sends or edits        │
+  │            │ arrives            │ personalized reply                                   │                       │
+  ├────────────┼────────────────────┼──────────────────────────────────────────────────────┼───────────────────────┤
+  │ Operations │ Supplier invoice   │ Matches it to the purchase order and receipt, flags  │ Resolves only the     │
+  │            │ arrives            │ mismatches                                           │ exceptions            │
+  ├────────────┼────────────────────┼──────────────────────────────────────────────────────┼───────────────────────┤
+  │ HR / IT    │ Employee leaves    │ Lists all their access, revokes it, collects         │ Confirms              │
+  │            │                    │ equipment                                            │                       │
+  ├────────────┼────────────────────┼──────────────────────────────────────────────────────┼───────────────────────┤
+  │ Support    │ Ticket created     │ Categorizes, finds the answer, drafts a reply,       │ Handles the hard ones │
+  │            │                    │ escalates if angry or urgent                         │                       │
+  └────────────┴────────────────────┴──────────────────────────────────────────────────────┴───────────────────────┘
+
+  How to find the valuable spots in any company
+
+  Ask the team these questions and look for "yes" answers:
+  - Where does work wait in a queue for someone to look at it?
+  - Where do people copy data from one system into another?
+  - Where do people read documents to check them against rules?
+  - Where do handoffs between teams slow things down?
+  - What's done the same way every time but still needs a bit of judgment?
+
+  Each "yes" is a candidate for an agent.
+
+  How it connects technically (simple version)
+
+  - Systems (Salesforce, SAP, Jira, Gmail, SharePoint) expose APIs, meaning ways for software to read and write data.
+  - The agent (an AI model like Claude, plus instructions and tools) gets access to those APIs, often through connectors
+    such as MCP.
+  - A workflow tool (n8n, Zapier, Power Automate, or custom code) watches for the trigger and starts the agent.
+  - An approval step (Slack message, email, or a button in the system) puts a human in the loop.
+
+  What this means for selling it
+
+  You don't sell "agents for Marketing." You go into one company, map one process end to end, find the 2–3 steps causing
+  the most delay, put agents there, and measure the before and after. The example to aim for: "onboarding went from 7
+  days to 1." Then you repeat that in the next process, or at the next company in the same industry.
+
+  If you want, I can turn this into a visual one-page diagram you can use when pitching, or we can pick one process and
+  design the agent in detail: its trigger, its instructions, and the systems it connects to.
 
 CH1 DONE 
-today till 105
-+1 till 152
-+2 till 199
+CH5 INPRO
